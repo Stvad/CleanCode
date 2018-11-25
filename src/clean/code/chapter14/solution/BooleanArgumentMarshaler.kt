@@ -2,22 +2,23 @@ package clean.code.chapter14.solution
 
 import java.util.NoSuchElementException
 
-import clean.code.chapter14.solution.ArgsException.ErrorCode.MISSING_BOOLEAN
+import clean.code.chapter14.solution.ArgsExceptions.MISSING_BOOLEAN
 import kotlin.reflect.KClass
 
-class BooleanArgumentMarshaler : ArgumentMarshaler {
+class BooleanArgumentMarshaler : ArgumentMarshaler<Boolean> {
     private var booleanValue = false
 
     override fun set(currentArgument: Iterator<String>) = try {
         booleanValue = currentArgument.next().toBoolean()
     } catch (e: NoSuchElementException) {
-        throw ArgsException(MISSING_BOOLEAN)
+        throw MISSING_BOOLEAN()
     }
 
-    val value: Boolean
+    override val value: Boolean
         get() = booleanValue
 
     companion object : ArgumentMarshalerCompanion {
-        override val managedType: KClass<*> = Boolean::class
+        override val schemaIdentifier = ""
+        override val managedType = Boolean::class
     }
 }

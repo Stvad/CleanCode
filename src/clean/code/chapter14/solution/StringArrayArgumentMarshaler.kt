@@ -1,7 +1,6 @@
 package clean.code.chapter14.solution
 
-class StringArrayArgumentMarshaler : ArgumentMarshaler<*> {
-    @Throws(ArgsException::class)
+class StringArrayArgumentMarshaler : ArgumentMarshaler {
     override fun set(currentArgument: Iterator<String>) {
         //TODO: Auto-generated
     }

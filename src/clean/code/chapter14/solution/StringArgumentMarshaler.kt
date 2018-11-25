@@ -1,20 +1,20 @@
 package clean.code.chapter14.solution
 
+import clean.code.chapter14.solution.ArgsExceptions.MISSING_STRING
 import java.util.NoSuchElementException
 
-import clean.code.chapter14.solution.ArgsException.ErrorCode.MISSING_STRING
+class StringArgumentMarshaler : ArgumentMarshaler<String> {
+    override val value: String
+        get() = stringValue
 
-class StringArgumentMarshaler : ArgumentMarshaler<*> {
     private var stringValue = ""
 
-    @Throws(ArgsException::class)
     override fun set(currentArgument: Iterator<String>) {
         try {
             stringValue = currentArgument.next()
         } catch (e: NoSuchElementException) {
-            throw ArgsException(MISSING_STRING)
+            throw MISSING_STRING()
         }
-
     }
 
     companion object {

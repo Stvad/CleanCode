@@ -1,33 +1,29 @@
 package clean.code.chapter14.solution
 
+import clean.code.chapter14.solution.ArgsExceptions.INVALID_DOUBLE
+import clean.code.chapter14.solution.ArgsExceptions.MISSING_DOUBLE
 import java.util.NoSuchElementException
 
-import clean.code.chapter14.solution.ArgsException.ErrorCode.*
+class DoubleArgumentMarshaler : ArgumentMarshaler<Double> {
+    override val value: Double
+        get() = doubleValue
 
-class DoubleArgumentMarshaler : ArgumentMarshaler<*> {
     private var doubleValue = 0.0
 
-    @Throws(ArgsException::class)
     override fun set(currentArgument: Iterator<String>) {
         var parameter: String? = null
         try {
             parameter = currentArgument.next()
-            doubleValue = java.lang.Double.parseDouble(parameter)
+            doubleValue = parameter.toDouble()
         } catch (e: NoSuchElementException) {
-            throw ArgsException(MISSING_DOUBLE)
+            throw MISSING_DOUBLE()
         } catch (e: NumberFormatException) {
-            throw ArgsException(INVALID_DOUBLE, parameter)
+            throw INVALID_DOUBLE(errorParameter = parameter)
         }
-
     }
 
-    companion object {
-
-        fun getValue(am: ArgumentMarshaler<*>?): Double {
-            return if (am != null && am is DoubleArgumentMarshaler)
-                am.doubleValue
-            else
-                0.0
-        }
+    companion object : ArgumentMarshalerCompanion {
+        override val managedType = Double::class
+        override val schemaIdentifier = ""
     }
 }

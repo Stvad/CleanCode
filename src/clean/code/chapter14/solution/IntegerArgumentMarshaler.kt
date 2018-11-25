@@ -1,37 +1,29 @@
 package clean.code.chapter14.solution
 
 import java.util.NoSuchElementException
-
-import clean.code.chapter14.solution.ArgsException.ErrorCode.INVALID_INTEGER
-import clean.code.chapter14.solution.ArgsException.ErrorCode.MISSING_INTEGER
 import kotlin.reflect.KClass
 
-class IntegerArgumentMarshaler : ArgumentMarshaler {
+class IntegerArgumentMarshaler : ArgumentMarshaler<Int> {
+    override val value: Int
+        get() = intValue
+
     private var intValue = 0
 
-    @Throws(ArgsException::class)
     override fun set(currentArgument: Iterator<String>) {
         var parameter: String? = null
         try {
             parameter = currentArgument.next()
-            intValue = Integer.parseInt(parameter)
+            intValue = parameter.toInt()
         } catch (e: NoSuchElementException) {
-            throw ArgsException(MISSING_INTEGER)
+            throw ArgsExceptions.MISSING_INTEGER()
         } catch (e: NumberFormatException) {
-            throw ArgsException(INVALID_INTEGER, parameter)
+            throw ArgsExceptions.INVALID_INTEGER(errorParameter = parameter)
         }
 
     }
 
     companion object : ArgumentMarshalerCompanion {
-        override val managedType: KClass<*> = Int::class
-
-
-        fun getValue(am: ArgumentMarshaler?): Int {
-            return if (am != null && am is IntegerArgumentMarshaler)
-                am.intValue
-            else
-                0
-        }
+        override val schemaIdentifier = "#"
+        override val managedType = Int::class
     }
 }

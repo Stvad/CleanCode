@@ -17,13 +17,8 @@ class StringArgumentMarshaler : ArgumentMarshaler<String> {
         }
     }
 
-    companion object {
-
-        fun getValue(am: ArgumentMarshaler<*>?): String {
-            return if (am != null && am is StringArgumentMarshaler)
-                am.stringValue
-            else
-                ""
-        }
+    companion object : ArgumentMarshalerCompanion {
+        override val schemaIdentifier = "*"
+        override val managedType = String::class
     }
 }

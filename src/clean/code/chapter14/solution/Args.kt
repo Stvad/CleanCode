@@ -30,7 +30,7 @@ class Args(schema: String, args: Array<String>) {
         validateSchemaElementId(elementId)
 
         val elementTail = element.substring(1)
-        val marshallerInstantiator = schemaInstantiators[elementTail]
+        val marshallerInstantiator = Companion.schemaInstantiators[elementTail]
                 ?: throw INVALID_ARGUMENT_FORMAT(elementId, elementTail)
         marshalers[elementId] = marshallerInstantiator.call()
     }
@@ -68,45 +68,30 @@ class Args(schema: String, args: Array<String>) {
     fun cardinality(): Int = argsFound.size
     fun nextArgument(): Int = currentArgument.nextIndex()
 
-//    fun getBoolean(arg: Char): Boolean {
-//        return BooleanArgumentMarshaler.getValue(marshalers[arg])
-//    }
-//
-//    fun getString(arg: Char): String {
-//        return StringArgumentMarshaler.getValue(marshalers[arg])
-//    }
-//
-//    fun getInt(arg: Char): Int {
-//        return IntegerArgumentMarshaler.getValue(marshalers[arg])
-//    }
-//
-//    fun getDouble(arg: Char): Double {
-//        return DoubleArgumentMarshaler.getValue(marshalers[arg])
-//    }
-//
-//    fun getStringArray(arg: Char): Array<String> {
-//        return StringArrayArgumentMarshaler.getValue(marshalers[arg])
-//    }
 
-    private val supportedMarshalers = listOf(IntegerArgumentMarshaler::class, BooleanArgumentMarshaler::class)
-    private val supportedTypes = supportedMarshalers.associateBy { (it.companionObjectInstance as ArgumentMarshalerCompanion).managedType }
-    private val schemaInstantiators = supportedMarshalers.associate { (it.companionObjectInstance as ArgumentMarshalerCompanion).schemaIdentifier to it.primaryConstructor }
+    inline fun <reified T : Any> get(arg: Char) = this.get(arg, T::class)
 
-    fun <T : Any> get(arg: Char, clazz: KClass<T>): T {
-        val marshallerClass = supportedTypes[clazz] ?: throw ArgsExceptions.UNEXPECTED_ARGUMENT()
-        return clazz.cast((marshalers[arg] ?: throw throw ArgsExceptions.UNEXPECTED_ARGUMENT()).value)
-//        return marshallerClass.cast(marshalers[arg] ?: throw throw ArgsExceptions.UNEXPECTED_ARGUMENT()).value
+    fun <T : Any> get(arg: Char, clazz: KClass<T>): T =
+            try {
+                clazz.cast(marshalers[arg]!!.value)
+            } catch (e: TypeCastException) {
+                throw ArgsExceptions.ARGUMENT_TYPE_MISMATCH(arg)
+            }
 
+
+    companion object {
+        private val supportedMarshalers = listOf(IntegerArgumentMarshaler::class, BooleanArgumentMarshaler::class, StringArgumentMarshaler::class)
+        private val schemaInstantiators = supportedMarshalers
+                .associate { (it.companionObjectInstance as ArgumentMarshalerCompanion).schemaIdentifier to it.primaryConstructor }
     }
 }
 
-inline fun <reified T : Any> Args.get(arg: Char) = this.get(arg, T::class)
 
 fun main(args: Array<String>) = try {
     val arg = Args("l,p#,d*", args)
     val logging: Boolean = arg.get('l')
     val port: Int = arg.get('p')
-    val directory: String = arg.get('d')
+    val directory = arg.get<String>('d')
 
     println("logging [$logging] port [$port] directory [$directory]")
 } catch (e: ArgsException) {

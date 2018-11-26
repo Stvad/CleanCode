@@ -1,9 +1,7 @@
 package clean.code.chapter14.solution
 
-import java.util.NoSuchElementException
-
 import clean.code.chapter14.solution.ArgsExceptions.MISSING_BOOLEAN
-import kotlin.reflect.KClass
+import java.util.NoSuchElementException
 
 class BooleanArgumentMarshaler : ArgumentMarshaler<Boolean> {
     private var booleanValue = false

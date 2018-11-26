@@ -1,6 +1,6 @@
-package clean.code.chapter14.solution
+package clean.code.chapter14.kotlin
 
-import clean.code.chapter14.solution.ArgsExceptions.MISSING_STRING
+import clean.code.chapter14.kotlin.ArgsExceptions.MISSING_STRING
 import java.util.NoSuchElementException
 
 class StringArgumentMarshaler : ArgumentMarshaler<String> {

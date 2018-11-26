@@ -1,7 +1,7 @@
-package clean.code.chapter14.solution
+package clean.code.chapter14.kotlin
 
-import clean.code.chapter14.solution.ArgsExceptions.INVALID_DOUBLE
-import clean.code.chapter14.solution.ArgsExceptions.MISSING_DOUBLE
+import clean.code.chapter14.kotlin.ArgsExceptions.INVALID_DOUBLE
+import clean.code.chapter14.kotlin.ArgsExceptions.MISSING_DOUBLE
 import java.util.NoSuchElementException
 
 class DoubleArgumentMarshaler : ArgumentMarshaler<Double> {

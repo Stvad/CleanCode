@@ -1,4 +1,4 @@
-package clean.code.chapter14.solution
+package clean.code.chapter14.kotlin
 
 import java.util.NoSuchElementException
 import kotlin.reflect.KClass

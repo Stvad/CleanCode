@@ -1,4 +1,4 @@
-package clean.code.chapter14.solution
+package clean.code.chapter14.kotlin
 
 class ArgsException(val messageSupplier: (errorArgumentId: Char, errorParameter: String?) -> String,
                     var errorArgumentId: Char = '\u0000',

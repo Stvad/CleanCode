@@ -8,6 +8,5 @@ interface ArgumentMarshaler<T : Any> {
 }
 
 interface ArgumentMarshalerCompanion {
-    val managedType: KClass<*>
     val schemaIdentifier: String
 }

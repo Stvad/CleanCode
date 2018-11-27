@@ -19,6 +19,5 @@ class StringArgumentMarshaler : ArgumentMarshaler<String> {
 
     companion object : ArgumentMarshalerCompanion {
         override val schemaIdentifier = "*"
-        override val managedType = String::class
     }
 }

@@ -17,6 +17,5 @@ class BooleanArgumentMarshaler : ArgumentMarshaler<Boolean> {
 
     companion object : ArgumentMarshalerCompanion {
         override val schemaIdentifier = ""
-        override val managedType = Boolean::class
     }
 }

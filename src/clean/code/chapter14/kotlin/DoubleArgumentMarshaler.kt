@@ -24,6 +24,5 @@ class DoubleArgumentMarshaler : ArgumentMarshaler<Double> {
 
     companion object : ArgumentMarshalerCompanion {
         override val schemaIdentifier = "##"
-        override val managedType = Double::class
     }
 }

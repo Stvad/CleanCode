@@ -24,6 +24,5 @@ class IntegerArgumentMarshaler : ArgumentMarshaler<Int> {
 
     companion object : ArgumentMarshalerCompanion {
         override val schemaIdentifier = "#"
-        override val managedType = Int::class
     }
 }

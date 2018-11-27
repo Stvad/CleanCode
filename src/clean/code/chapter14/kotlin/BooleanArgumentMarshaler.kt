@@ -3,13 +3,13 @@ package clean.code.chapter14.kotlin
 import clean.code.chapter14.kotlin.ArgsExceptions.MISSING_BOOLEAN
 import java.util.NoSuchElementException
 
-class BooleanArgumentMarshaler : ArgumentMarshaler<Boolean> {
+class BooleanArgumentMarshaler(override val id: Char) : ArgumentMarshaler<Boolean> {
     private var booleanValue = false
 
     override fun set(currentArgument: Iterator<String>) = try {
         booleanValue = currentArgument.next().toBoolean()
     } catch (e: NoSuchElementException) {
-        throw MISSING_BOOLEAN()
+        throw MISSING_BOOLEAN(id)
     }
 
     override val value: Boolean

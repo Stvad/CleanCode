@@ -4,7 +4,7 @@ import clean.code.chapter14.kotlin.ArgsExceptions.INVALID_DOUBLE
 import clean.code.chapter14.kotlin.ArgsExceptions.MISSING_DOUBLE
 import java.util.NoSuchElementException
 
-class DoubleArgumentMarshaler : ArgumentMarshaler<Double> {
+class DoubleArgumentMarshaler(override val id: Char) : ArgumentMarshaler<Double> {
     override val value: Double
         get() = doubleValue
 
@@ -16,9 +16,9 @@ class DoubleArgumentMarshaler : ArgumentMarshaler<Double> {
             parameter = currentArgument.next()
             doubleValue = parameter.toDouble()
         } catch (e: NoSuchElementException) {
-            throw MISSING_DOUBLE()
+            throw MISSING_DOUBLE(id)
         } catch (e: NumberFormatException) {
-            throw INVALID_DOUBLE(errorParameter = parameter)
+            throw INVALID_DOUBLE(id, parameter)
         }
     }
 

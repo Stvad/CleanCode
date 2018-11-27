@@ -3,7 +3,7 @@ package clean.code.chapter14.kotlin
 import java.util.NoSuchElementException
 import kotlin.reflect.KClass
 
-class IntegerArgumentMarshaler : ArgumentMarshaler<Int> {
+class IntegerArgumentMarshaler(override val id: Char) : ArgumentMarshaler<Int> {
     override val value: Int
         get() = intValue
 
@@ -15,11 +15,10 @@ class IntegerArgumentMarshaler : ArgumentMarshaler<Int> {
             parameter = currentArgument.next()
             intValue = parameter.toInt()
         } catch (e: NoSuchElementException) {
-            throw ArgsExceptions.MISSING_INTEGER()
+            throw ArgsExceptions.MISSING_INTEGER(id)
         } catch (e: NumberFormatException) {
-            throw ArgsExceptions.INVALID_INTEGER(errorParameter = parameter)
+            throw ArgsExceptions.INVALID_INTEGER(id, parameter)
         }
-
     }
 
     companion object : ArgumentMarshalerCompanion {

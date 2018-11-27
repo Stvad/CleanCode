@@ -1,8 +1,8 @@
 package clean.code.chapter14.kotlin
 
 class ArgsException(val messageSupplier: (errorArgumentId: Char, errorParameter: String?) -> String,
-                    var errorArgumentId: Char = '\u0000',
-                    var errorParameter: String? = null) : RuntimeException() {
+                    private val errorArgumentId: Char = '\u0000',
+                    private val errorParameter: String? = null) : RuntimeException() {
 
     override val message: String
         get() = messageSupplier(errorArgumentId, errorParameter)

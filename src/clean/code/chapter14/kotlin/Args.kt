@@ -33,7 +33,7 @@ class Args(schema: String, args: Array<String>) {
         val elementTail = element.substring(1)
         val marshallerInstantiator = marshalerProviders[elementTail]
                 ?: throw INVALID_ARGUMENT_FORMAT(elementId, elementTail)
-        marshalers[elementId] = marshallerInstantiator.call()
+        marshalers[elementId] = marshallerInstantiator.call(elementId)
     }
 
     private fun validateSchemaElementId(elementId: Char) {
@@ -55,22 +55,16 @@ class Args(schema: String, args: Array<String>) {
 
     private fun parseArgumentCharacter(argChar: Char) {
         val marshaler = marshalers[argChar] ?: throw UNEXPECTED_ARGUMENT(argChar)
+        marshaler.set(currentArgument)
         argsFound.add(argChar)
-        try {
-            marshaler.set(currentArgument)
-        } catch (e: ArgsException) {
-            e.errorArgumentId = argChar
-            throw e
-        }
     }
 
     inline fun <reified T : Any> get(arg: Char) = this.get(arg, T::class)
-    fun <T : Any> get(arg: Char, clazz: KClass<T>): T =
-            try {
-                clazz.cast(marshalers[arg]!!.value)
-            } catch (e: TypeCastException) {
-                throw ArgsExceptions.ARGUMENT_TYPE_MISMATCH(arg)
-            }
+    fun <T : Any> get(arg: Char, clazz: KClass<T>): T = try {
+        clazz.cast(marshalers[arg]!!.value)
+    } catch (e: TypeCastException) {
+        throw ArgsExceptions.ARGUMENT_TYPE_MISMATCH(arg)
+    }
 
     fun has(arg: Char): Boolean = argsFound.contains(arg)
     fun cardinality(): Int = argsFound.size
